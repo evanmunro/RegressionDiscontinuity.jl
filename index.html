@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- META -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Nikos Ignatiadis">
+  <title>RegressionDiscontinuity.jl</title>
+
+  <link rel="icon" type="image/png"  href="/PkgPage.jl/assets/favicon.ico">
+
+  <!-- CSS -->
+  
+   <link rel="stylesheet" href="/PkgPage.jl/libs/highlight/styles/atom-one-dark.css">
+   
+  <link rel="stylesheet" href="/PkgPage.jl/css/bootstrap.min.css">
+  <style>.bg-primary {
+  background-color: #660066 !important;
+}
+
+a {
+  color: #2669DD;
+}
+
+a:hover {
+  color: teal;
+}
+
+.section-bg-color {
+  background-color: #f6f8fa;
+}
+
+footer a {
+  color: cornflowerblue;
+}
+
+
+header {
+  margin-top: 55px !important;
+}
+
+
+
+.jumbotron {
+  background-image: url("assets/diagonal-lines.svg");
+  background-repeat: repeat;
+}
+
+
+/* CODE ADJUSTMENTS */
+
+pre code.hljs {
+  border-radius: 10px;
+}
+
+pre code.hljs.plaintext {
+  margin-left: 15px;
+}
+</style>
+  <link rel="stylesheet" href="/PkgPage.jl/css/custom.css">
+
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+</head>
+<body id="page-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+  <div class="container">
+    <span class="navbar-brand">
+      
+        <img src="/PkgPage.jl/assets/logo.svg" class="img-fluid" style="height:         25px;
+padding-right:  10px;
+" alt="Logo"/>
+      
+      <a href="#page-top">RegressionDiscontinuity.jl</a>
+      
+    </span>
+    <input type="checkbox" id="navbar-toggler-cbox" class="d-none" />
+    <label for="navbar-toggler-cbox" class="navbar-toggler" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </label>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#about">About</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#walkthrough">Walkthrough</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#references">References</a>
+        </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <header class="text-white text-center">
+  
+    <div class="jumbotron jumbotron-fluid container-fluid bg-primary">
+  
+    <h1>RegressionDiscontinuity.jl</h1>
+    <div class="lead">Estimation and inference for sharp regression discontinuity designs.
+</div>
+    
+      <a class="github-button" href="https://github.com/nignatiadis/RegressionDiscontinuity.jl" data-size="large" aria-label="View RegressionDiscontinuity.jl on GitHub">View on GitHub</a>
+    
+    
+      <a class="github-button" href="https://github.com/nignatiadis/RegressionDiscontinuity.jl" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star RegressionDiscontinuity.jl on GitHub">Star</a>
+    
+  </div>
+</header>
+
+  <!-- Content appended here -->
+<div class="franklin-content"><section id="about" class="scrollspy">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>
+          About this Package
+        </h2>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="walkthrough" class="scrollspy section-bg-color">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>
+          Walkthrough
+        </h2>
+
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames, RegressionDiscontinuity, Plots
+lee08 = load_rdd_data(:lee08) |&gt; DataFrame
+first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="plaintext hljs">3×3 DataFrame
+│ Row │ Ys      │ Ws   │ Zs      │
+│     │ Float64 │ Bool │ Float64 │
+├─────┼─────────┼──────┼─────────┤
+│ 1   │ 0.0     │ 0    │ -1.0    │
+│ 2   │ 0.0     │ 0    │ -1.0    │
+│ 3   │ 0.0     │ 0    │ -1.0    │</code></pre>
+<pre><code class="julia hljs">running_var = RunningVariable(lee08.Zs, cutoff=<span class="hljs-number">0.0</span>, treated=:≧);</code></pre>
+<pre><code class="julia hljs">plot(running_var; ylim=(<span class="hljs-number">0</span>,<span class="hljs-number">600</span>), bins=<span class="hljs-number">40</span>, background_color=<span class="hljs-string">&quot;#f3f6f9&quot;</span>, size=(<span class="hljs-number">600</span>,<span class="hljs-number">300</span>))</code></pre>
+<div style="text-align:center;"> <img src="/PkgPage.jl/assets/index/code/output/histogram.svg" alt=""></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="references" class="scrollspy">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>
+          References
+        </h2>
+
+<p><strong>Related Julia packages</strong></p>
+<ul>
+<li><p><a href="https://github.com/maximerischard/GeoRDD.jl">GeoRDD.jl</a>: Package for spatial regression discontinuity designs.</p>
+</li>
+</ul>
+<p><strong>Related R packages</strong></p>
+<ul>
+<li><p><a href="https://cran.r-project.org/web/packages/rdd/index.html">rdd</a></p>
+</li>
+<li><p><a href="https://github.com/swager/optrdd">optrdd</a></p>
+</li>
+<li><p><a href="https://github.com/kolesarm/RDHonest">RDHonest</a></p>
+</li>
+<li><p><a href="https://cran.r-project.org/web/packages/rdrobust/index.html">rdrobust</a></p>
+</li>
+</ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="py-5 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">&copy; Nikos Ignatiadis. Website powered by <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a>, <a href="https://github.com/tlienart/PkgPage.jl">PkgPage.jl</a> and the <a href="https://julialang.org">Julia</a> programming language.</p>
+  </div>
+</footer>
+</div><!-- CONTENT ENDS HERE -->
+  
+  
+      
+
+
+  
+  <script src="/PkgPage.jl/libs/simple-scrollspy.min.js"></script>
+  <script>
+  window.onload = function () {
+    scrollSpy('#navbarResponsive', {
+      sectionClass: '.scrollspy',
+      menuActiveTarget: '.nav-link',
+      offset: 100
+    })
+  }
+  </script>
+  </body>
+</html>
