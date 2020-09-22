@@ -81,10 +81,6 @@ padding-right:  10px;
       <ul class="navbar-nav ml-auto">
         
         <li class="nav-item">
-          <a class="nav-link" href="#about">About</a>
-        </li>
-        
-        <li class="nav-item">
           <a class="nav-link" href="#walkthrough">Walkthrough</a>
         </li>
         
@@ -114,20 +110,7 @@ padding-right:  10px;
 </header>
 
   <!-- Content appended here -->
-<div class="franklin-content"><section id="about" class="scrollspy">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-10 mx-auto">
-        <h2>
-          About this Package
-        </h2>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="walkthrough" class="scrollspy section-bg-color">
+<div class="franklin-content"><section id="walkthrough" class="scrollspy">
   <div class="container">
     <div class="row">
       <div class="col-lg-10 mx-auto">
@@ -135,6 +118,7 @@ padding-right:  10px;
           Walkthrough
         </h2>
 
+<p>Let us load the dataset from <a href="#ref-lee2018">Lee &#40;2018&#41;</a>. We will reproduce analyses from <a href="#ref-ik2012">Imbens and Kalyanaraman &#40;2012&#41;</a>.</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames, RegressionDiscontinuity, Plots
 lee08 = load_rdd_data(:lee08) |&gt; DataFrame
 first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="plaintext hljs">3×3 DataFrame
@@ -145,14 +129,48 @@ first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="p
 │ 2   │ 0.0     │ 0    │ -1.0    │
 │ 3   │ 0.0     │ 0    │ -1.0    │</code></pre>
 <pre><code class="julia hljs">running_var = RunningVariable(lee08.Zs, cutoff=<span class="hljs-number">0.0</span>, treated=:≧);</code></pre>
-<pre><code class="julia hljs">plot(running_var; ylim=(<span class="hljs-number">0</span>,<span class="hljs-number">600</span>), bins=<span class="hljs-number">40</span>, background_color=<span class="hljs-string">&quot;#f3f6f9&quot;</span>, size=(<span class="hljs-number">600</span>,<span class="hljs-number">300</span>))</code></pre>
+<p>Let us first plot the histogram of the running variable:</p>
+<pre><code class="julia hljs">plot(running_var; ylim=(<span class="hljs-number">0</span>,<span class="hljs-number">600</span>), bins=<span class="hljs-number">40</span>, background_color=<span class="hljs-string">&quot;#f3f6f9&quot;</span>, size=(<span class="hljs-number">700</span>,<span class="hljs-number">400</span>))</code></pre>
 <div style="text-align:center;"> <img src="/RegressionDiscontinuity.jl/assets/index/code/output/histogram.svg" alt=""></div>
+<p>Next we plot the regressogram &#40;also known as scatterbin&#41; of the response:</p>
+<pre><code class="julia hljs">regressogram = plot(running_var, lee08.Ys; bins=<span class="hljs-number">40</span>, background_color=<span class="hljs-string">&quot;#f3f6f9&quot;</span>, size=(<span class="hljs-number">700</span>,<span class="hljs-number">400</span>), legend=:bottomright)</code></pre>
+<div style="text-align:center;"> <img src="/RegressionDiscontinuity.jl/assets/index/code/output/regressogram.svg" alt=""></div>
+<p>We observe a jump at the discontinuity, which we can estimate, e.g., with local linear regression. We use local linear regression with rectangular kernel and choose bandwidth with the Imbens-Kalyanaraman bandwidth selector:</p>
+<pre><code class="julia hljs">rect_ll_rd = fit(NaiveLocalLinearRD(kernel=Rectangular(), bandwidth=ImbensKalyanaraman()),
+                 running_var, lee08.Ys)</code></pre><pre><code class="plaintext hljs">Local linear regression for regression discontinuity design
+       ⋅⋅⋅⋅ Naive inference (not accounting for bias)
+       ⋅⋅⋅⋅ Rectangular kernel (U[-0.5,0.5])
+       ⋅⋅⋅⋅ Imbens Kalyanaraman bandwidth
+       ⋅⋅⋅⋅ Eicker White Huber variance
+────────────────────────────────────────────────────────────
+                          h       τ̂         se         bias
+────────────────────────────────────────────────────────────
+Sharp RD estimand  0.462024  0.08077  0.0087317  unaccounted
+────────────────────────────────────────────────────────────</code></pre>
+<pre><code class="julia hljs">plot!(regressogram, rect_ll_rd; show_local_support=<span class="hljs-literal">true</span>)</code></pre>
+<div style="text-align:center;"> <img src="/RegressionDiscontinuity.jl/assets/index/code/output/regressogram_plus_llfit.svg" alt=""></div>
+<p>Let zoom in on the support of the local kernel and also with more refined regerssogram:</p>
+<pre><code class="julia hljs">local_regressogram = plot(rect_ll_rd.data_subset; bins=<span class="hljs-number">40</span>, background_color=<span class="hljs-string">&quot;#f3f6f9&quot;</span>, size=(<span class="hljs-number">700</span>,<span class="hljs-number">400</span>), legend=:bottomright)
+plot!(rect_ll_rd)</code></pre>
+<div style="text-align:center;"> <img src="/RegressionDiscontinuity.jl/assets/index/code/output/local_regressogram.svg" alt=""></div>
+<p>Finally, We could repeat all of the above analysis with another kernel, e.g. the triangular kernel.</p>
+<pre><code class="julia hljs">triang_ll_rd = fit(NaiveLocalLinearRD(kernel=SymTriangularDist(), bandwidth=ImbensKalyanaraman()),
+				   running_var, lee08.Ys)</code></pre><pre><code class="plaintext hljs">Local linear regression for regression discontinuity design
+       ⋅⋅⋅⋅ Naive inference (not accounting for bias)
+       ⋅⋅⋅⋅ Triangular kernel
+       ⋅⋅⋅⋅ Imbens Kalyanaraman bandwidth
+       ⋅⋅⋅⋅ Eicker White Huber variance
+───────────────────────────────────────────────────────────────
+                          h         τ̂          se         bias
+───────────────────────────────────────────────────────────────
+Sharp RD estimand  0.293907  0.0799218  0.00834476  unaccounted
+───────────────────────────────────────────────────────────────</code></pre>
       </div>
     </div>
   </div>
 </section>
 
-<section id="references" class="scrollspy">
+<section id="references" class="scrollspy section-bg-color">
   <div class="container">
     <div class="row">
       <div class="col-lg-10 mx-auto">
@@ -160,6 +178,13 @@ first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="p
           References
         </h2>
 
+<p><strong>Publications</strong></p>
+<ul>
+<li><p><a id="ref-ik2012" class="anchor"></a> Imbens, Guido, and Karthik Kalyanaraman. &quot;Optimal bandwidth choice for the regression discontinuity estimator.&quot; The Review of economic studies 79.3 &#40;2012&#41;: 933-959.</p>
+</li>
+<li><p><a id="ref-lee2018" class="anchor"></a> Lee, David S. &quot;Randomized experiments from non-random selection in US House elections.&quot; Journal of Econometrics 142.2 &#40;2008&#41;: 675-697.</p>
+</li>
+</ul>
 <p><strong>Related Julia packages</strong></p>
 <ul>
 <li><p><a href="https://github.com/maximerischard/GeoRDD.jl">GeoRDD.jl</a>: Package for spatial regression discontinuity designs.</p>
