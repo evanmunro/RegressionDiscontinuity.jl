@@ -121,9 +121,9 @@ padding-right:  10px;
 <p>Let us load the dataset from <a href="#ref-lee2018">Lee &#40;2018&#41;</a>. We will reproduce analyses from <a href="#ref-ik2012">Imbens and Kalyanaraman &#40;2012&#41;</a>.</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames, RegressionDiscontinuity, Plots
 lee08 = load_rdd_data(:lee08) |&gt; DataFrame
-first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="plaintext hljs">Failed to precompile RegressionDiscontinuity [5f6169ef-b865-4e89-817c-551391b0abce] to /home/runner/.julia/compiled/v1.5/RegressionDiscontinuity/7zZ8K_O34Xo.ji.
+first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="plaintext hljs">Failed to precompile Plots [91a5bcdd-55d7-5caf-9e0b-520d859cae80] to /home/runner/.julia/compiled/v1.5/Plots/ld3vC_O34Xo.ji.
 </code></pre>
-<pre><code class="julia hljs">running_var = RunningVariable(lee08.Zs, cutoff=<span class="hljs-number">0.0</span>, treated=:≧);</code></pre><pre><code class="plaintext hljs">UndefVarError: RunningVariable not defined
+<pre><code class="julia hljs">running_var = RunningVariable(lee08.Zs, cutoff=<span class="hljs-number">0.0</span>, treated=:≧);</code></pre><pre><code class="plaintext hljs">UndefVarError: lee08 not defined
 </code></pre>
 <p>Let us first plot the histogram of the running variable:</p>
 <pre><code class="julia hljs">plot(running_var; ylim=(<span class="hljs-number">0</span>,<span class="hljs-number">600</span>), bins=<span class="hljs-number">40</span>, background_color=<span class="hljs-string">&quot;#f3f6f9&quot;</span>, size=(<span class="hljs-number">700</span>,<span class="hljs-number">400</span>))</code></pre><pre><code class="plaintext hljs">UndefVarError: plot not defined
@@ -135,7 +135,7 @@ first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="p
 <div style="text-align:center;"> <p><span style="color:red;">// Image matching '/assets/index/code/regressogram' not found. //</span></p></div>
 <p>We observe a jump at the discontinuity, which we can estimate, e.g., with local linear regression. We use local linear regression with rectangular kernel and choose bandwidth with the Imbens-Kalyanaraman bandwidth selector:</p>
 <pre><code class="julia hljs">rect_ll_rd = fit(NaiveLocalLinearRD(kernel=Rectangular(), bandwidth=ImbensKalyanaraman()),
-                 running_var, lee08.Ys)</code></pre><pre><code class="plaintext hljs">UndefVarError: Rectangular not defined
+                 running_var, lee08.Ys)</code></pre><pre><code class="plaintext hljs">UndefVarError: lee08 not defined
 </code></pre>
 <pre><code class="julia hljs">plot!(regressogram, rect_ll_rd; show_local_support=<span class="hljs-literal">true</span>)</code></pre><pre><code class="plaintext hljs">UndefVarError: plot! not defined
 </code></pre>
@@ -147,7 +147,7 @@ plot!(rect_ll_rd)</code></pre><pre><code class="plaintext hljs">UndefVarError: p
 <div style="text-align:center;"> <p><span style="color:red;">// Image matching '/assets/index/code/local_regressogram' not found. //</span></p></div>
 <p>Finally, We could repeat all of the above analysis with another kernel, e.g. the triangular kernel.</p>
 <pre><code class="julia hljs">triang_ll_rd = fit(NaiveLocalLinearRD(kernel=SymTriangularDist(), bandwidth=ImbensKalyanaraman()),
-				   running_var, lee08.Ys)</code></pre><pre><code class="plaintext hljs">UndefVarError: SymTriangularDist not defined
+				   running_var, lee08.Ys)</code></pre><pre><code class="plaintext hljs">UndefVarError: lee08 not defined
 </code></pre>
       </div>
     </div>
