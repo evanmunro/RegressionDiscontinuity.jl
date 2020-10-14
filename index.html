@@ -121,7 +121,7 @@ padding-right:  10px;
 <p>Let us load the dataset from <a href="#ref-lee2018">Lee &#40;2018&#41;</a>. We will reproduce analyses from <a href="#ref-ik2012">Imbens and Kalyanaraman &#40;2012&#41;</a>.</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames, RegressionDiscontinuity, Plots
 lee08 = load_rdd_data(:lee08) |&gt; DataFrame
-first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="plaintext hljs">Failed to precompile RegressionDiscontinuity [5f6169ef-b865-4e89-817c-551391b0abce] to /home/runner/.julia/compiled/v1.4/RegressionDiscontinuity/7zZ8K_l6zeG.ji.
+first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="plaintext hljs">Failed to precompile RegressionDiscontinuity [5f6169ef-b865-4e89-817c-551391b0abce] to /home/runner/.julia/compiled/v1.5/RegressionDiscontinuity/7zZ8K_O34Xo.ji.
 </code></pre>
 <pre><code class="julia hljs">running_var = RunningVariable(lee08.Zs, cutoff=<span class="hljs-number">0.0</span>, treated=:≧);</code></pre><pre><code class="plaintext hljs">UndefVarError: RunningVariable not defined
 </code></pre>
@@ -140,7 +140,7 @@ first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="p
 <pre><code class="julia hljs">plot!(regressogram, rect_ll_rd; show_local_support=<span class="hljs-literal">true</span>)</code></pre><pre><code class="plaintext hljs">UndefVarError: plot! not defined
 </code></pre>
 <div style="text-align:center;"> <p><span style="color:red;">// Image matching '/assets/index/code/regressogram_plus_llfit' not found. //</span></p></div>
-<p>Let zoom in on the support of the local kernel and also with more refined regerssogram:</p>
+<p>Let&#39;s zoom in on the support of the local kernel and also with more refined regressogram:</p>
 <pre><code class="julia hljs">local_regressogram = plot(rect_ll_rd.data_subset; bins=<span class="hljs-number">40</span>, background_color=<span class="hljs-string">&quot;#f3f6f9&quot;</span>, size=(<span class="hljs-number">700</span>,<span class="hljs-number">400</span>), legend=:bottomright)
 plot!(rect_ll_rd)</code></pre><pre><code class="plaintext hljs">UndefVarError: plot not defined
 </code></pre>
