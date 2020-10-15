@@ -121,7 +121,9 @@ padding-right:  10px;
 <p>Let us load the dataset from <a href="#ref-lee2018">Lee &#40;2018&#41;</a>. We will reproduce analyses from <a href="#ref-ik2012">Imbens and Kalyanaraman &#40;2012&#41;</a>.</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames, RegressionDiscontinuity, Plots
 lee08 = load_rdd_data(:lee08) |&gt; DataFrame
-first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="plaintext hljs">Failed to precompile RegressionDiscontinuity [5f6169ef-b865-4e89-817c-551391b0abce] to /home/runner/.julia/compiled/v1.4/RegressionDiscontinuity/7zZ8K_l6zeG.ji.
+first(lee08, <span class="hljs-number">3</span>)</code></pre><pre><code class="plaintext hljs">ArgumentError: Package RegressionDiscontinuity [5f6169ef-b865-4e89-817c-551391b0abce] is required but does not seem to be installed:
+ - Run `Pkg.instantiate()` to install all recorded dependencies.
+
 </code></pre>
 <pre><code class="julia hljs">running_var = RunningVariable(lee08.Zs, cutoff=<span class="hljs-number">0.0</span>, treated=:≧);</code></pre><pre><code class="plaintext hljs">UndefVarError: RunningVariable not defined
 </code></pre>
